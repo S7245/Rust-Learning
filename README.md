@@ -1,8 +1,8 @@
-# Rust 50 天高级学习计划
+# Rust 50 天系统网络学习计划
 
-本仓库用于承载一套系统化、工程化、偏高级的 Rust 学习计划。
+本仓库用于承载一套系统化、工程化、偏系统网络方向的 Rust 学习计划。
 
-连续项目：`FerrisFlow`，一个从 CLI 逐步演进为具备持久化、异步调度、Web API、可观测性、性能优化和发布流程的本地任务编排系统。
+连续项目：`FerrisTunnel`，一个从 CLI 逐步演进为具备配置管理、异步 TCP/UDP 转发、路由与会话表、VPN/代理式隧道、可观测性、性能优化和发布流程的本地系统网络项目。
 
 ## 仓库约定
 
@@ -13,9 +13,9 @@
 
 ## 自动化
 
-- 开始日期：`2026-05-14`
+- 开始日期：`2026-05-08`
 - 时区：`Asia/Shanghai`
-- 每日运行时间：`11:00`
+- 每日运行时间：`13:40`
 - Notion 主页面：https://www.notion.so/Rust-Plan-35fbfc73ea1480cd876ce9932f452269?source=copy_link
 - GitHub 远端：https://github.com/S7245/Rust-Learning.git
 
@@ -24,4 +24,3 @@
 ```text
 Day NN: add {topic} learning code
 ```
-

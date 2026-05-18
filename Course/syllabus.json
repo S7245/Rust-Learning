@@ -1,20 +1,29 @@
 {
   "course": {
-    "title": "Rust 50 天高级学习计划",
-    "project": "FerrisFlow",
-    "projectDescription": "一个从 CLI 逐步演进为具备持久化、异步调度、Web API、可观测性、性能优化和发布流程的本地任务编排系统。",
+    "title": "Rust 50 天系统网络学习计划",
+    "project": "FerrisTunnel",
+    "projectDescription": "一个从 CLI 逐步演进为具备配置管理、异步 TCP/UDP 转发、路由与会话表、VPN/代理式隧道、可观测性、性能优化和发布流程的本地系统网络项目。",
     "totalDays": 50,
     "nodeSize": 10,
-    "startDate": "2026-05-14",
+    "startDate": "2026-05-08",
     "timezone": "Asia/Shanghai",
-    "dailyPushTime": "11:00",
-    "requiredSections": ["主题", "学习重点", "项目实践", "核心理解", "参考源"],
+    "dailyPushTime": "13:40",
+    "requiredSections": [
+      "概念剖析 (The Why and What)",
+      "核心代码演示 (The How)",
+      "架构师的实战洞察",
+      "今日挑战",
+      "延伸阅读推荐"
+    ],
     "notionPage": "https://www.notion.so/Rust-Plan-35fbfc73ea1480cd876ce9932f452269?source=copy_link",
     "notionDatabase": "https://www.notion.so/e5419668b4ff4d48880da8351814b978",
     "notionDataSource": "collection://215db0df-5bdc-440d-9641-885baedbccdf",
     "notionView": "view://360bfc73-ea14-813c-99b3-000c2dcc469c",
     "githubRepo": "/Users/liushan/Documents/Codex/Rust-Learning",
-    "githubRemote": "https://github.com/S7245/Rust-Learning.git"
+    "githubRemote": "https://github.com/S7245/Rust-Learning.git",
+    "targetAudience": "具备 Objective-C/客户端开发经验，计划转向 Rust 系统层、网络基础设施、VPN/代理/隧道方向的开发者。",
+    "learningGoal": "通过连续项目 FerrisTunnel，建立 Rust 所有权、系统 API 边界、异步网络 IO、协议建模、并发控制、性能、安全与发布的系统网络开发能力。",
+    "diagramPolicy": "只为所有权、生命周期、协议流、异步调度、网络转发和扩展架构等抽象负担高的课程建议 Excalidraw 图示；以帮助理解系统网络心智模型为目的，不追求每课都配图。"
   },
   "days": [
     {
@@ -22,550 +31,1150 @@
       "node": "节点 1",
       "difficulty": "入门",
       "topic": "Rust 工程世界观与 Cargo Workspace",
-      "focus": "Rust 编译模型、crate/package/workspace、edition、模块边界、工程目录约定",
-      "practice": "创建连续项目 FerrisFlow：本地任务编排与事件处理系统；初始化 workspace、核心库 crate、CLI crate",
-      "understanding": "Rust 不是语法优先的语言，而是以包边界、所有权边界和编译期约束驱动工程设计。",
-      "reference": ["https://doc.rust-lang.org/book/ch01-00-getting-started.html", "https://doc.rust-lang.org/cargo/reference/workspaces.html", "https://doc.rust-lang.org/reference/crates-and-source-files.html"],
+      "objective": "学完后能够用 Cargo 创建 Rust workspace，理解 crate/package/workspace 的边界，并运行最小 CLI、核心库与网络模块骨架。",
+      "focus": "Rust 编译模型、cargo run/test、crate/package/workspace、edition、main/lib、模块边界、系统网络项目目录约定",
+      "objcBridge": "把 Cargo workspace 类比为 Xcode workspace 加依赖管理，但 Rust 的 crate 边界同时也是编译、可见性和系统 API 稳定边界。",
+      "practice": "创建连续项目 FerrisTunnel：本地 VPN/代理式网络隧道系统；初始化 workspace、核心库 crate、网络 crate、CLI crate。",
+      "understanding": "Rust 不是语法优先的语言，而是以包边界、所有权边界和编译期约束驱动系统工程设计。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch01-00-getting-started.html",
+        "https://doc.rust-lang.org/cargo/reference/workspaces.html",
+        "https://doc.rust-lang.org/reference/crates-and-source-files.html"
+      ],
       "codeSlug": "workspace_foundation"
     },
     {
       "day": 2,
       "node": "节点 1",
       "difficulty": "入门",
-      "topic": "所有权、移动语义与资源生命周期",
-      "focus": "move/copy/clone、RAII、Drop、栈与堆、资源释放确定性",
-      "practice": "为 FerrisFlow 设计 Task、Project、Event 基础数据模型，避免无意义 clone",
-      "understanding": "所有权是 Rust 的架构工具，用来表达资源归属、生命周期和不可共享状态。",
-      "reference": ["https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html", "https://doc.rust-lang.org/std/ops/trait.Drop.html", "https://doc.rust-lang.org/reference/destructors.html"],
-      "codeSlug": "ownership_domain_model"
+      "topic": "所有权、移动语义与网络资源生命周期",
+      "objective": "学完后能够解释所有权、move、copy、clone 与 Drop 如何决定 socket、配置、会话和缓冲区的资源生命周期。",
+      "focus": "struct/impl 基础、move/copy/clone、RAII、Drop、栈与堆、socket/session/buffer 生命周期",
+      "objcBridge": "ARC 的 strong/copy/weak 是运行时引用管理；Rust 的 ownership/move/Drop 是编译期资源归属证明，尤其适合表达系统资源关闭时机。",
+      "practice": "为 FerrisTunnel 设计 TunnelProfile、Peer、Route、PacketBuffer、SessionEvent 基础数据模型，避免无意义 clone。",
+      "understanding": "所有权是 Rust 的系统工程工具，用来表达资源归属、生命周期和不可共享状态。",
+      "diagram": {
+        "recommended": true,
+        "type": "flowchart",
+        "title": "网络资源所有权生命周期图",
+        "purpose": "用流程图展示 profile、session、buffer 从创建、移动、借用到 Drop 的资源归属变化。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch04-00-understanding-ownership.html",
+        "https://doc.rust-lang.org/std/ops/trait.Drop.html",
+        "https://doc.rust-lang.org/reference/destructors.html"
+      ],
+      "codeSlug": "ownership_network_model"
     },
     {
       "day": 3,
       "node": "节点 1",
       "difficulty": "进阶",
-      "topic": "借用、引用与 API 形状设计",
-      "focus": "&T / &mut T、借用冲突、函数签名设计、数据只读与可变访问边界",
-      "practice": "实现任务创建、更新、查询 API；比较按值传递、借用传递和可变借用的接口差异",
-      "understanding": "好的 Rust API 首先是好的借用协议，函数签名本身就是并发与状态安全的契约。",
-      "reference": ["https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html", "https://doc.rust-lang.org/reference/types/pointer.html", "https://rust-lang.github.io/api-guidelines/flexibility.html"],
-      "codeSlug": "borrowing_api_design"
+      "topic": "借用、引用与系统 API 形状设计",
+      "objective": "学完后能够用 &T、&mut T 和 Option/Result 设计 profile、route、session 的创建、查询、更新 API，并读懂常见借用错误。",
+      "focus": "&T / &mut T、借用冲突、函数签名设计、Option/Result 返回值、只读配置与可变会话边界",
+      "objcBridge": "可把 &T 理解成只读访问契约，&mut T 理解成独占写入契约；Option/Result 比 nullable 与 NSError 更强制调用方处理缺失和失败。",
+      "practice": "实现 tunnel profile 创建、route 更新、session 查询 API；比较按值传递、借用传递和可变借用的接口差异。",
+      "understanding": "好的 Rust 系统 API 首先是好的借用协议，函数签名本身就是状态安全和并发安全的契约。",
+      "diagram": {
+        "recommended": true,
+        "type": "relationship",
+        "title": "系统 API 借用形状图",
+        "purpose": "展示 &T、&mut T、按值传递、Option/Result 与调用方权限/代价的关系。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch04-02-references-and-borrowing.html",
+        "https://doc.rust-lang.org/reference/types/pointer.html",
+        "https://rust-lang.github.io/api-guidelines/flexibility.html"
+      ],
+      "codeSlug": "borrowing_network_api_design"
     },
     {
       "day": 4,
       "node": "节点 1",
       "difficulty": "进阶",
-      "topic": "生命周期与领域模型关系",
-      "focus": "显式生命周期、生命周期省略、悬垂引用、拥有型数据与视图型数据",
-      "practice": "为任务搜索结果实现只读 view 类型，如 TaskView<'a>，避免复制完整任务",
-      "understanding": "生命周期不是标注技巧，而是把数据依赖关系暴露给编译器验证。",
-      "reference": ["https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html", "https://doc.rust-lang.org/reference/lifetime-elision.html", "https://doc.rust-lang.org/nomicon/lifetimes.html"],
-      "codeSlug": "lifetime_task_views"
+      "topic": "生命周期与零拷贝视图",
+      "objective": "学完后能够用生命周期描述 PacketView、RouteView 与底层 buffer/profile 之间的依赖关系，减少网络数据复制。",
+      "focus": "显式生命周期、生命周期省略、悬垂引用、拥有型 buffer 与视图型 packet/route 数据",
+      "objcBridge": "生命周期不是 weak 指针，也不是手动 retain/release；它表达“这个视图不能活得比原始 buffer 更久”的编译期约束。",
+      "practice": "为 packet 解析结果实现只读 PacketView<'a>，从 &[u8] 中读取 header 与 payload，避免复制完整数据包。",
+      "understanding": "生命周期不是标注技巧，而是把数据依赖关系暴露给编译器验证，系统网络代码尤其依赖这种约束。",
+      "diagram": {
+        "recommended": true,
+        "type": "relationship",
+        "title": "PacketView 生命周期依赖图",
+        "purpose": "展示 PacketView 借用原始 buffer 时，视图生命周期必须短于 buffer 拥有者的约束。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch10-03-lifetime-syntax.html",
+        "https://doc.rust-lang.org/reference/lifetime-elision.html",
+        "https://doc.rust-lang.org/nomicon/lifetimes.html"
+      ],
+      "codeSlug": "lifetime_packet_views"
     },
     {
       "day": 5,
       "node": "节点 1",
       "difficulty": "进阶",
-      "topic": "枚举、模式匹配与状态机建模",
-      "focus": "enum、match 穷尽性、Option/Result、非法状态不可表示",
-      "practice": "用 enum 设计任务状态流转：Todo/InProgress/Blocked/Done，实现合法状态转移",
-      "understanding": "Rust 的 enum 适合做领域建模，核心目标是把运行时错误前移到编译期。",
-      "reference": ["https://doc.rust-lang.org/book/ch06-00-enums.html", "https://doc.rust-lang.org/book/ch18-00-patterns.html", "https://doc.rust-lang.org/reference/expressions/match-expr.html"],
-      "codeSlug": "enum_state_machine"
+      "topic": "枚举、模式匹配与隧道状态机建模",
+      "objective": "学完后能够用 enum 和 match 建模隧道连接状态，把非法状态转移挡在类型和穷尽匹配之外。",
+      "focus": "enum、match 穷尽性、Option/Result、Disconnected/Connecting/Established/Draining/Closed 状态建模",
+      "objcBridge": "Rust enum 比 NS_ENUM 更强，因为 variant 可以携带失败原因、握手信息或关闭原因；match 会检查状态分支是否漏掉。",
+      "practice": "用 enum 设计 TunnelState：Disconnected/Connecting/Established/Draining/Closed，实现合法状态转移。",
+      "understanding": "Rust 的 enum 适合做协议和连接状态建模，核心目标是把运行时错误前移到编译期。",
+      "diagram": {
+        "recommended": true,
+        "type": "flowchart",
+        "title": "隧道连接状态机图",
+        "purpose": "展示 Disconnected、Connecting、Established、Draining、Closed 之间允许和禁止的状态转移。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch06-00-enums.html",
+        "https://doc.rust-lang.org/book/ch18-00-patterns.html",
+        "https://doc.rust-lang.org/reference/expressions/match-expr.html"
+      ],
+      "codeSlug": "tunnel_state_machine"
     },
     {
       "day": 6,
       "node": "节点 1",
       "difficulty": "进阶",
-      "topic": "错误处理与可恢复失败设计",
-      "focus": "Result、错误传播 ?、自定义错误类型、错误分层、用户错误与系统错误",
-      "practice": "为 FerrisFlow 增加领域错误、输入错误、存储错误，并统一 CLI 输出",
-      "understanding": "Rust 错误处理的核心不是少写异常，而是明确失败边界与恢复策略。",
-      "reference": ["https://doc.rust-lang.org/book/ch09-00-error-handling.html", "https://doc.rust-lang.org/std/result/", "https://rust-lang.github.io/api-guidelines/interoperability.html"],
-      "codeSlug": "recoverable_error_design"
+      "topic": "错误处理与网络失败边界",
+      "objective": "学完后能够用 Result、? 和自定义错误类型区分配置错误、协议错误、IO 错误与可重试网络失败。",
+      "focus": "Result、错误传播 ?、io::Error、协议错误、错误分层、用户错误与系统错误",
+      "objcBridge": "NSError 常靠约定传递；Rust 用 Result 把失败写进函数签名，让“可重试、可恢复、致命失败”成为调用契约。",
+      "practice": "为 FerrisTunnel 增加配置错误、路由错误、协议错误、网络 IO 错误，并统一 CLI 输出。",
+      "understanding": "Rust 错误处理的核心不是少写异常，而是明确系统边界上的失败语义与恢复策略。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch09-00-error-handling.html",
+        "https://doc.rust-lang.org/std/result/",
+        "https://rust-lang.github.io/api-guidelines/interoperability.html"
+      ],
+      "codeSlug": "network_error_design"
     },
     {
       "day": 7,
       "node": "节点 1",
       "difficulty": "进阶",
-      "topic": "模块系统、可见性与架构分层",
-      "focus": "mod、pub、re-export、crate API、领域层/应用层/接口层分离",
-      "practice": "重构项目为 domain、app、cli 三层，暴露最小公共 API",
-      "understanding": "模块系统是架构约束工具，pub 越少，系统长期演进越稳。",
-      "reference": ["https://doc.rust-lang.org/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html", "https://doc.rust-lang.org/reference/visibility-and-privacy.html", "https://rust-lang.github.io/api-guidelines/organization.html"],
-      "codeSlug": "module_architecture_layers"
+      "topic": "模块系统、可见性与系统分层",
+      "objective": "学完后能够用 mod、pub 和 re-export 划分 domain、net、app、cli 层，并收紧 crate 的公共 API。",
+      "focus": "mod、pub、re-export、crate API、领域层/网络 IO 层/应用层/接口层分离",
+      "objcBridge": "Objective-C 通过 header 暴露接口；Rust 用 pub/mod/re-export 精确控制系统模块边界，默认私有更利于长期演进。",
+      "practice": "重构项目为 domain、net、app、cli 四层，暴露最小公共 API。",
+      "understanding": "模块系统是架构约束工具，pub 越少，系统层代码长期演进越稳。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch07-00-managing-growing-projects-with-packages-crates-and-modules.html",
+        "https://doc.rust-lang.org/reference/visibility-and-privacy.html",
+        "https://rust-lang.github.io/api-guidelines/organization.html"
+      ],
+      "codeSlug": "module_system_layers"
     },
     {
       "day": 8,
       "node": "节点 1",
       "difficulty": "进阶",
-      "topic": "Traits、泛型与抽象边界",
-      "focus": "trait、trait bound、泛型函数、静态分发、依赖倒置",
-      "practice": "抽象 TaskRepository trait，为内存存储实现 repository",
-      "understanding": "Rust 的抽象不是面向对象替代品，而是用 trait 定义能力边界和可替换实现。",
-      "reference": ["https://doc.rust-lang.org/book/ch10-02-traits.html", "https://doc.rust-lang.org/reference/items/traits.html", "https://rust-lang.github.io/api-guidelines/flexibility.html"],
-      "codeSlug": "trait_repository_boundary"
+      "topic": "Traits、泛型与网络能力边界",
+      "objective": "学完后能够用 trait 和泛型定义 Transport、RouteStore 抽象，理解能力边界与可替换实现。",
+      "focus": "trait、trait bound、泛型函数、静态分发、Transport/RouteStore 抽象、依赖倒置",
+      "objcBridge": "trait 可类比 protocol，但它能参与泛型约束、静态分发和对象安全规则，适合表达系统组件能力边界。",
+      "practice": "抽象 Transport trait 与 RouteStore trait，为内存 route store 和 mock transport 实现基础版本。",
+      "understanding": "Rust 的抽象不是面向对象替代品，而是用 trait 定义网络组件能力和可替换实现。",
+      "diagram": {
+        "recommended": true,
+        "type": "relationship",
+        "title": "Transport Trait 与 Objective-C Protocol 对照图",
+        "purpose": "展示 trait、trait bound、transport 实现和依赖倒置之间的关系。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch10-02-traits.html",
+        "https://doc.rust-lang.org/reference/items/traits.html",
+        "https://rust-lang.github.io/api-guidelines/flexibility.html"
+      ],
+      "codeSlug": "transport_trait_boundary"
     },
     {
       "day": 9,
       "node": "节点 1",
       "difficulty": "进阶",
-      "topic": "测试驱动的 Rust 工程实践",
-      "focus": "单元测试、集成测试、测试模块组织、断言错误路径、cargo test 工作流",
-      "practice": "为任务状态机、repository、应用服务补充测试，建立第一组验收用例",
-      "understanding": "Rust 测试应验证不变量，而不只是验证函数输出。",
-      "reference": ["https://doc.rust-lang.org/book/ch11-00-testing.html", "https://doc.rust-lang.org/cargo/commands/cargo-test.html", "https://doc.rust-lang.org/rustc/tests/index.html"],
-      "codeSlug": "testing_domain_invariants"
+      "topic": "测试驱动的 Rust 系统实践",
+      "objective": "学完后能够组织单元测试与集成测试，围绕状态机、路由表、协议解析和错误路径验证系统不变量。",
+      "focus": "单元测试、集成测试、测试模块组织、断言错误路径、cargo test 工作流、协议边界测试",
+      "objcBridge": "XCTest 常验证行为结果；Rust 测试更适合配合类型系统验证协议不变量、错误路径和边界行为。",
+      "practice": "为隧道状态机、route store、packet parser、应用服务补充测试，建立第一组验收用例。",
+      "understanding": "Rust 测试应验证系统不变量，而不只是验证函数输出。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch11-00-testing.html",
+        "https://doc.rust-lang.org/cargo/commands/cargo-test.html",
+        "https://doc.rust-lang.org/rustc/tests/index.html"
+      ],
+      "codeSlug": "testing_network_invariants"
     },
     {
       "day": 10,
       "node": "节点 1",
       "difficulty": "进阶",
-      "topic": "节点 1 综合验收：领域核心与 CLI 原型",
-      "focus": "汇总所有权、生命周期、错误、模块、trait、测试，形成可运行最小系统",
-      "practice": "完成 FerrisFlow v0.1：支持创建任务、切换状态、查询任务、内存存储、CLI 演示与测试",
-      "understanding": "第一个节点的目标是建立可编译、可测试、边界清晰的 Rust 工程内核。",
-      "reference": ["https://doc.rust-lang.org/book/", "https://doc.rust-lang.org/cargo/", "https://rust-lang.github.io/api-guidelines/"],
-      "codeSlug": "node01_cli_prototype"
+      "topic": "节点 1 综合验收：网络配置 CLI 原型",
+      "objective": "学完后能够把节点 1 的语言机制合成一个可运行、可测试、边界清晰的 FerrisTunnel CLI 原型。",
+      "focus": "汇总所有权、生命周期、错误、模块、trait、测试，形成可运行最小网络配置系统",
+      "objcBridge": "这一步相当于从零散 demo 合成一个可运行 app skeleton，只是核心不在 UI 生命周期，而在隧道配置与网络领域内核。",
+      "practice": "完成 FerrisTunnel v0.1：支持创建 profile、添加 route、切换 tunnel 状态、查询配置、内存存储、CLI 演示与测试。",
+      "understanding": "第一个节点的目标是建立可编译、可测试、边界清晰的 Rust 系统网络内核。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/",
+        "https://doc.rust-lang.org/cargo/",
+        "https://rust-lang.github.io/api-guidelines/"
+      ],
+      "codeSlug": "node01_network_cli_prototype"
     },
     {
       "day": 11,
       "node": "节点 2",
       "difficulty": "进阶",
       "topic": "Trait 深水区：静态分发与动态分发",
+      "objective": "学完后能够区分泛型静态分发与 dyn Trait 动态分发，并为 Transport/RouteStore 服务入口选择合适抽象形态。",
       "focus": "泛型 trait bound、impl Trait、dyn Trait、对象安全、单态化成本",
-      "practice": "为 FerrisFlow 的 repository 层同时设计泛型服务与 dyn TaskRepository 服务入口",
+      "objcBridge": "Objective-C protocol 调用多是运行时动态派发；Rust 还能通过泛型单态化获得静态分发，用代码体积换性能。",
+      "practice": "为 FerrisTunnel 的 transport 与 route store 层同时设计泛型服务与 dyn Trait 服务入口。",
       "understanding": "Trait 是 Rust 的架构抽象边界，静态分发偏性能，动态分发偏运行时组合。",
-      "reference": ["https://doc.rust-lang.org/book/ch17-02-trait-objects.html", "https://doc.rust-lang.org/reference/items/traits.html#object-safety", "https://rust-lang.github.io/rfcs/0255-object-safety.html"],
+      "diagram": {
+        "recommended": true,
+        "type": "relationship",
+        "title": "静态分发与动态分发对照图",
+        "purpose": "展示泛型单态化和 dyn Trait 运行时派发在性能、组合性上的取舍。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch17-02-trait-objects.html",
+        "https://doc.rust-lang.org/reference/items/traits.html#object-safety",
+        "https://rust-lang.github.io/rfcs/0255-object-safety.html"
+      ],
       "codeSlug": "static_dynamic_dispatch"
     },
     {
       "day": 12,
       "node": "节点 2",
       "difficulty": "进阶",
-      "topic": "智能指针与共享所有权",
-      "focus": "Box<T>、Rc<T>、Arc<T>、Weak<T>、共享图结构、所有权环风险",
-      "practice": "为任务依赖关系建模，支持一个任务依赖多个任务，并避免循环引用设计失控",
-      "understanding": "智能指针不是绕过所有权，而是显式选择数据共享和生命周期管理策略。",
-      "reference": ["https://doc.rust-lang.org/book/ch15-00-smart-pointers.html", "https://doc.rust-lang.org/std/rc/", "https://doc.rust-lang.org/std/sync/struct.Arc.html"],
-      "codeSlug": "smart_pointer_dependencies"
+      "topic": "智能指针与连接拓扑共享",
+      "objective": "学完后能够选择 Box、Rc、Arc、Weak 建模 peer、route、session 的共享拓扑，并识别引用环风险。",
+      "focus": "Box<T>、Rc<T>、Arc<T>、Weak<T>、连接拓扑、共享图结构、所有权环风险",
+      "objcBridge": "Rc/Arc/Weak 对应 strong/weak 的部分心智，但 Rust 会显式区分单线程 Rc 与跨线程 Arc，并要求你处理引用环。",
+      "practice": "为 peer 与 route 关系建模，支持一个 peer 暴露多个 route，并避免循环引用设计失控。",
+      "understanding": "智能指针不是绕过所有权，而是显式选择系统拓扑中的数据共享和生命周期管理策略。",
+      "diagram": {
+        "recommended": true,
+        "type": "relationship",
+        "title": "Peer/Route/Session 共享拓扑图",
+        "purpose": "展示 Box、Rc、Arc、Weak 在连接拓扑和共享状态中的差异。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch15-00-smart-pointers.html",
+        "https://doc.rust-lang.org/std/rc/",
+        "https://doc.rust-lang.org/std/sync/struct.Arc.html"
+      ],
+      "codeSlug": "smart_pointer_topology"
     },
     {
       "day": 13,
       "node": "节点 2",
       "difficulty": "高级",
       "topic": "内部可变性与可变状态边界",
+      "objective": "学完后能够把 Cell、RefCell、Mutex 约束在 session registry 等小范围状态容器内，理解运行时借用检查与线程安全锁的差异。",
       "focus": "Cell、RefCell、Mutex、运行时借用检查、状态封装",
-      "practice": "为内存 repository 增加可测试的状态容器，比较 RefCell 与 Mutex 的适用边界",
+      "objcBridge": "RefCell 像把可变性延后到运行时检查，Mutex 像 NSLock/@synchronized；共同原则是把可变状态藏在小边界里。",
+      "practice": "为内存 SessionRegistry 增加可测试的状态容器，比较 RefCell 与 Mutex 在单线程测试和多线程网络状态中的适用边界。",
       "understanding": "内部可变性应被封装在小边界内，不能让运行时借用错误扩散成架构习惯。",
-      "reference": ["https://doc.rust-lang.org/book/ch15-05-interior-mutability.html", "https://doc.rust-lang.org/std/cell/", "https://doc.rust-lang.org/std/sync/struct.Mutex.html"],
-      "codeSlug": "interior_mutability_boundary"
+      "diagram": {
+        "recommended": true,
+        "type": "relationship",
+        "title": "SessionRegistry 内部可变性边界图",
+        "purpose": "展示 Cell、RefCell、Mutex 的检查时机、线程边界和封装范围。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch15-05-interior-mutability.html",
+        "https://doc.rust-lang.org/std/cell/",
+        "https://doc.rust-lang.org/std/sync/struct.Mutex.html"
+      ],
+      "codeSlug": "session_registry_state"
     },
     {
       "day": 14,
       "node": "节点 2",
       "difficulty": "高级",
       "topic": "迭代器、闭包与数据管道",
+      "objective": "学完后能够用迭代器和闭包实现连接筛选、route 匹配、peer 维度统计，并理解惰性组合的性能含义。",
       "focus": "Iterator trait、惰性求值、闭包捕获、组合子、零成本抽象",
-      "practice": "实现任务筛选、排序、分组统计，如按状态、优先级、项目维度聚合",
+      "objcBridge": "Iterator 链式组合类似 NSArray 的 map/filter/block，但 Rust 的惰性迭代和所有权规则能减少中间集合与额外复制。",
+      "practice": "实现 session 筛选、route 排序、peer/protocol/status 维度聚合统计。",
       "understanding": "Rust 迭代器把表达力和性能结合起来，核心是让数据流保持惰性和可组合。",
-      "reference": ["https://doc.rust-lang.org/book/ch13-00-functional-features.html", "https://doc.rust-lang.org/std/iter/", "https://doc.rust-lang.org/reference/types/closure.html"],
-      "codeSlug": "iterator_data_pipeline"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch13-00-functional-features.html",
+        "https://doc.rust-lang.org/std/iter/",
+        "https://doc.rust-lang.org/reference/types/closure.html"
+      ],
+      "codeSlug": "iterator_network_stats"
     },
     {
       "day": 15,
       "node": "节点 2",
       "difficulty": "高级",
-      "topic": "序列化、反序列化与稳定数据格式",
-      "focus": "serde、JSON/TOML、schema 演进、字段默认值、兼容性策略",
-      "practice": "将 FerrisFlow 任务数据序列化为本地 JSON 文件，并设计版本字段",
-      "understanding": "持久化格式是长期 API，数据结构变化必须考虑向后兼容和迁移成本。",
-      "reference": ["https://serde.rs/", "https://docs.rs/serde/latest/serde/", "https://docs.rs/serde_json/latest/serde_json/"],
-      "codeSlug": "serde_stable_format"
+      "topic": "序列化、反序列化与稳定网络配置",
+      "objective": "学完后能够用 serde 设计稳定 JSON/TOML 网络 profile，并为字段默认值和版本演进预留空间。",
+      "focus": "serde、JSON/TOML、network profile、schema 演进、字段默认值、兼容性策略",
+      "objcBridge": "可以类比 NSJSONSerialization/NSCoding 的数据格式承诺，但 serde 通过 derive 和类型约束让字段兼容性更显式。",
+      "practice": "将 FerrisTunnel profile、peer、route 配置序列化为本地 TOML/JSON 文件，并设计版本字段。",
+      "understanding": "持久化配置是长期 API，网络配置变化必须考虑向后兼容和迁移成本。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://serde.rs/",
+        "https://docs.rs/serde/latest/serde/",
+        "https://docs.rs/serde_json/latest/serde_json/"
+      ],
+      "codeSlug": "serde_network_profile"
     },
     {
       "day": 16,
       "node": "节点 2",
       "difficulty": "高级",
       "topic": "文件系统持久化与错误恢复",
+      "objective": "学完后能够实现 profile repository 的加载、原子保存、备份提示和损坏配置错误恢复。",
       "focus": "路径处理、原子写入、临时文件、备份、损坏文件恢复策略",
-      "practice": "实现文件 repository：加载、保存、原子替换、损坏 JSON 报错与备份提示",
+      "objcBridge": "NSFileManager 写文件也要考虑临时文件和替换；Rust 这里强调把文件损坏、部分写入和恢复策略做成明确错误路径。",
+      "practice": "实现文件 profile repository：加载、保存、原子替换、损坏 TOML/JSON 报错与备份提示。",
       "understanding": "工程级存储不只是写文件，而是要保证失败时数据不被悄悄破坏。",
-      "reference": ["https://doc.rust-lang.org/std/fs/", "https://doc.rust-lang.org/std/path/", "https://docs.rs/tempfile/latest/tempfile/"],
-      "codeSlug": "filesystem_repository"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/std/fs/",
+        "https://doc.rust-lang.org/std/path/",
+        "https://docs.rs/tempfile/latest/tempfile/"
+      ],
+      "codeSlug": "filesystem_profile_repository"
     },
     {
       "day": 17,
       "node": "节点 2",
       "difficulty": "高级",
       "topic": "CLI 工程化与用户输入边界",
+      "objective": "学完后能够用 clap 建模 profile/route/session/stats 子命令、参数校验、退出码和用户友好错误。",
       "focus": "clap 命令建模、参数校验、子命令、用户友好错误、退出码",
-      "practice": "扩展 CLI：add/list/start/block/done/stats，接入文件 repository",
+      "objcBridge": "CLI 参数校验类似表单或设置页输入校验，只是 clap 会把命令结构、帮助信息和解析错误都固化成接口契约。",
+      "practice": "扩展 CLI：profile add/list、route add/list、tunnel start/stop、session list、stats，接入文件 repository。",
       "understanding": "CLI 是系统的公开接口，参数、错误和输出格式都应该被当作产品契约。",
-      "reference": ["https://docs.rs/clap/latest/clap/", "https://docs.rs/clap/latest/clap/_derive/", "https://rust-cli.github.io/book/"],
-      "codeSlug": "clap_cli_contract"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/clap/latest/clap/",
+        "https://docs.rs/clap/latest/clap/_derive/",
+        "https://rust-cli.github.io/book/"
+      ],
+      "codeSlug": "clap_tunnel_cli_contract"
     },
     {
       "day": 18,
       "node": "节点 2",
       "difficulty": "高级",
       "topic": "可观测性：日志、诊断与调试体验",
+      "objective": "学完后能够用 tracing 为 profile repository、route matching 和 session service 增加诊断事件。",
       "focus": "log、tracing、日志级别、结构化事件、调试信息与用户输出分离",
-      "practice": "为 repository 和 app service 增加 tracing span，CLI 支持 verbose 模式",
+      "objcBridge": "tracing 类似 os_log/signpost 的工程化版本，重点是结构化事件、span 和诊断上下文，而不是随手打印字符串。",
+      "practice": "为 repository、route matching 和 app service 增加 tracing span，CLI 支持 verbose 模式。",
       "understanding": "可观测性是工程系统的神经系统，日志应服务诊断，而不是污染业务输出。",
-      "reference": ["https://docs.rs/tracing/latest/tracing/", "https://docs.rs/tracing-subscriber/latest/tracing_subscriber/", "https://docs.rs/log/latest/log/"],
-      "codeSlug": "tracing_diagnostics"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/tracing/latest/tracing/",
+        "https://docs.rs/tracing-subscriber/latest/tracing_subscriber/",
+        "https://docs.rs/log/latest/log/"
+      ],
+      "codeSlug": "tracing_network_diagnostics"
     },
     {
       "day": 19,
       "node": "节点 2",
       "difficulty": "高级",
       "topic": "高质量测试：Mock、Fixture 与性质测试",
+      "objective": "学完后能够使用 fixture、临时目录、mock transport 和性质测试保护配置解析、路由匹配和状态流转。",
       "focus": "测试替身、临时目录、错误路径测试、proptest 思维、回归用例",
-      "practice": "为文件 repository、CLI 行为和任务状态流转建立集成测试与边界测试",
+      "objcBridge": "XCTest fixture 与临时目录经验可以迁移过来；proptest 则补上“随机生成输入找反例”的属性验证思路。",
+      "practice": "为 profile repository、CLI 行为、route matching 和 tunnel 状态流转建立集成测试与边界测试。",
       "understanding": "测试的重点是保护系统不变量，尤其是持久化、错误恢复和状态流转。",
-      "reference": ["https://doc.rust-lang.org/book/ch11-03-test-organization.html", "https://docs.rs/proptest/latest/proptest/", "https://docs.rs/assert_cmd/latest/assert_cmd/"],
-      "codeSlug": "quality_test_suite"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch11-03-test-organization.html",
+        "https://docs.rs/proptest/latest/proptest/",
+        "https://docs.rs/assert_cmd/latest/assert_cmd/"
+      ],
+      "codeSlug": "quality_network_test_suite"
     },
     {
       "day": 20,
       "node": "节点 2",
       "difficulty": "高级",
-      "topic": "节点 2 综合验收：可持久化 CLI 工具",
-      "focus": "抽象边界、智能指针、迭代器、serde、文件存储、CLI、测试整合",
-      "practice": "完成 FerrisFlow v0.2：本地持久化任务系统，支持依赖关系、统计、日志和集成测试",
-      "understanding": "第二个节点的目标是从能运行升级到可维护、可诊断、可持久化的工程工具。",
-      "reference": ["https://doc.rust-lang.org/book/", "https://serde.rs/", "https://rust-cli.github.io/book/"],
-      "codeSlug": "node02_persistent_cli"
+      "topic": "节点 2 综合验收：可配置隧道 CLI 工具",
+      "objective": "学完后能够交付 FerrisTunnel v0.2，把抽象边界、配置持久化、CLI、日志和测试整合成可维护工具。",
+      "focus": "抽象边界、智能指针、迭代器、serde、配置存储、CLI、测试整合",
+      "objcBridge": "这个节点像把原型 app 变成可日常使用的系统工具，区别是验收重点在配置持久化、路由匹配和命令契约。",
+      "practice": "完成 FerrisTunnel v0.2：本地可配置隧道管理 CLI，支持 peer/route/profile、统计、日志和集成测试。",
+      "understanding": "第二个节点的目标是从能运行升级到可维护、可诊断、可持久化的系统网络工具。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/",
+        "https://serde.rs/",
+        "https://rust-cli.github.io/book/"
+      ],
+      "codeSlug": "node02_configurable_tunnel_cli"
     },
     {
       "day": 21,
       "node": "节点 3",
       "difficulty": "高级",
       "topic": "Rust 并发模型与 Send / Sync",
+      "objective": "学完后能够判断 profile、session、buffer、transport handle 哪些类型可以跨线程移动或共享。",
       "focus": "线程安全边界、自动 trait、共享状态约束、编译期数据竞争防护",
-      "practice": "为 FerrisFlow 分析哪些领域类型可跨线程传递，并补充并发安全测试",
+      "objcBridge": "GCD 能把 block 丢到队列，但不证明捕获对象线程安全；Send/Sync 会在编译期约束哪些值能跨线程移动或共享。",
+      "practice": "为 FerrisTunnel 分析哪些领域类型可跨线程传递，并补充并发安全测试。",
       "understanding": "Rust 并发安全不是运行时约定，而是类型系统对谁能在线程间移动或共享的证明。",
-      "reference": ["https://doc.rust-lang.org/book/ch16-00-concurrency.html", "https://doc.rust-lang.org/nomicon/send-and-sync.html", "https://doc.rust-lang.org/std/marker/trait.Send.html"],
-      "codeSlug": "send_sync_analysis"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch16-00-concurrency.html",
+        "https://doc.rust-lang.org/nomicon/send-and-sync.html",
+        "https://doc.rust-lang.org/std/marker/trait.Send.html"
+      ],
+      "codeSlug": "send_sync_network_types"
     },
     {
       "day": 22,
       "node": "节点 3",
       "difficulty": "高级",
-      "topic": "线程、JoinHandle 与任务执行器雏形",
-      "focus": "std::thread、线程生命周期、panic 传播、join 策略、任务执行结果收集",
-      "practice": "实现同步版任务执行器：批量执行本地任务模拟器，并收集成功/失败状态",
+      "topic": "线程、JoinHandle 与网络执行器雏形",
+      "objective": "学完后能够用 std::thread 和 JoinHandle 管理线程生命周期、panic 传播与连接模拟结果归并。",
+      "focus": "std::thread、线程生命周期、panic 传播、join 策略、连接/包处理结果收集",
+      "objcBridge": "NSThread/NSOperation 也要管理生命周期和取消；Rust 的 JoinHandle 把线程结果和 panic 归并纳入显式处理。",
+      "practice": "实现同步版网络执行器：批量运行本地连接模拟器，并收集成功/失败状态。",
       "understanding": "线程是系统资源，工程重点不是开线程，而是管理生命周期、失败和结果归并。",
-      "reference": ["https://doc.rust-lang.org/book/ch16-01-threads.html", "https://doc.rust-lang.org/std/thread/", "https://doc.rust-lang.org/std/thread/struct.JoinHandle.html"],
-      "codeSlug": "threaded_executor"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch16-01-threads.html",
+        "https://doc.rust-lang.org/std/thread/",
+        "https://doc.rust-lang.org/std/thread/struct.JoinHandle.html"
+      ],
+      "codeSlug": "threaded_packet_executor"
     },
     {
       "day": 23,
       "node": "节点 3",
       "difficulty": "高级",
-      "topic": "Channel 与消息驱动架构",
-      "focus": "mpsc、生产者/消费者、命令消息、事件消息、关闭协议",
-      "practice": "将 FerrisFlow 的任务状态更新改造成消息驱动：命令进入队列，事件写回仓库",
-      "understanding": "Channel 让共享状态转化为消息流，降低锁竞争，也让系统边界更清楚。",
-      "reference": ["https://doc.rust-lang.org/book/ch16-02-message-passing.html", "https://doc.rust-lang.org/std/sync/mpsc/", "https://docs.rs/crossbeam-channel/latest/crossbeam_channel/"],
-      "codeSlug": "message_driven_architecture"
+      "topic": "Channel 与消息驱动网络管线",
+      "objective": "学完后能够用 channel 把控制命令、packet event 和 shutdown protocol 串成消息驱动流程。",
+      "focus": "mpsc、生产者/消费者、控制命令、packet event、session event、关闭协议",
+      "objcBridge": "Channel 可类比串行队列上的消息投递，比 delegate/notification 更适合表达命令、事件和关闭协议的所有权流动。",
+      "practice": "将 FerrisTunnel 的 session 状态更新改造成消息驱动：控制命令进入队列，packet/session event 写回 registry。",
+      "understanding": "Channel 让共享状态转化为消息流，降低锁竞争，也让网络系统边界更清楚。",
+      "diagram": {
+        "recommended": true,
+        "type": "flowchart",
+        "title": "Channel 网络消息管线图",
+        "purpose": "展示控制命令、packet event、session event 和 shutdown signal 的消息路径。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch16-02-message-passing.html",
+        "https://doc.rust-lang.org/std/sync/mpsc/",
+        "https://docs.rs/crossbeam-channel/latest/crossbeam_channel/"
+      ],
+      "codeSlug": "message_driven_network_pipeline"
     },
     {
       "day": 24,
       "node": "节点 3",
       "difficulty": "高级",
       "topic": "锁、共享状态与并发不变量",
+      "objective": "学完后能够为 SessionRegistry 选择 Mutex/RwLock 和合适锁粒度，保护并发 session 状态不变量。",
       "focus": "Mutex、RwLock、锁粒度、死锁风险、poisoning、临界区设计",
-      "practice": "为任务执行状态实现并发安全的 ExecutionRegistry，记录运行中/完成/失败任务",
+      "objcBridge": "NSLock/@synchronized 只提供同步原语；Rust 的锁还和所有权、poisoning、临界区作用域一起约束状态访问。",
+      "practice": "为连接状态实现并发安全的 SessionRegistry，记录 active/closing/closed/failed sessions。",
       "understanding": "锁不是坏东西，坏的是边界不清、持锁过久和把业务逻辑塞进临界区。",
-      "reference": ["https://doc.rust-lang.org/book/ch16-03-shared-state.html", "https://doc.rust-lang.org/std/sync/struct.Mutex.html", "https://doc.rust-lang.org/std/sync/struct.RwLock.html"],
-      "codeSlug": "concurrent_registry"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch16-03-shared-state.html",
+        "https://doc.rust-lang.org/std/sync/struct.Mutex.html",
+        "https://doc.rust-lang.org/std/sync/struct.RwLock.html"
+      ],
+      "codeSlug": "concurrent_session_registry"
     },
     {
       "day": 25,
       "node": "节点 3",
       "difficulty": "高级",
       "topic": "Async/Await 与 Future 心智模型",
+      "objective": "学完后能够解释 Future、poll、await 与 executor 的关系，并把异步网络函数看作可暂停状态机。",
       "focus": "Future、poll、await、executor、阻塞与非阻塞、async 函数状态机",
-      "practice": "引入 Tokio，将任务执行器改造成 async 版本，支持异步 sleep 模拟任务耗时",
+      "objcBridge": "async/await 不是 GCD 自动开线程；更像编译器把回调流程改写成可暂停状态机，由 executor 决定何时推进网络 IO。",
+      "practice": "引入 Tokio，将连接模拟器改造成 async 版本，支持异步 sleep 和模拟网络延迟。",
       "understanding": "Rust async 的本质是可暂停状态机，不是自动开线程的魔法。",
-      "reference": ["https://rust-lang.github.io/async-book/", "https://doc.rust-lang.org/std/future/trait.Future.html", "https://tokio.rs/tokio/tutorial"],
-      "codeSlug": "async_future_executor"
+      "diagram": {
+        "recommended": true,
+        "type": "flowchart",
+        "title": "Future poll 网络状态机图",
+        "purpose": "展示异步网络 Future 在 Pending/Ready 之间由 executor 轮询推进的过程。"
+      },
+      "reference": [
+        "https://rust-lang.github.io/async-book/",
+        "https://doc.rust-lang.org/std/future/trait.Future.html",
+        "https://tokio.rs/tokio/tutorial"
+      ],
+      "codeSlug": "async_future_network_executor"
     },
     {
       "day": 26,
       "node": "节点 3",
       "difficulty": "高级",
-      "topic": "Tokio Runtime 与异步任务编排",
+      "topic": "Tokio Runtime 与异步 Session 编排",
+      "objective": "学完后能够用 Tokio runtime、spawn、JoinSet、定时器和取消机制编排多个连接/session 任务。",
       "focus": "runtime、tokio::spawn、JoinSet、定时器、异步取消、任务泄漏风险",
-      "practice": "为 FerrisFlow 增加并发执行多个任务、等待全部完成、失败汇总的调度逻辑",
+      "objcBridge": "Tokio runtime 类似更严格的 NSOperationQueue/GCD 调度环境，但任务取消、JoinSet 和资源回收需要显式设计。",
+      "practice": "为 FerrisTunnel 增加并发处理多个 session、等待全部完成、失败汇总的调度逻辑。",
       "understanding": "异步工程的核心是调度、取消、超时和资源回收，而不只是 .await。",
-      "reference": ["https://docs.rs/tokio/latest/tokio/runtime/", "https://docs.rs/tokio/latest/tokio/task/struct.JoinSet.html", "https://tokio.rs/tokio/topics/shutdown"],
-      "codeSlug": "tokio_task_orchestration"
+      "diagram": {
+        "recommended": true,
+        "type": "architecture",
+        "title": "Tokio Runtime 与 Session 编排图",
+        "purpose": "展示 runtime、spawn、JoinSet、timer、cancellation 与 session 结果汇总的关系。"
+      },
+      "reference": [
+        "https://docs.rs/tokio/latest/tokio/runtime/",
+        "https://docs.rs/tokio/latest/tokio/task/struct.JoinSet.html",
+        "https://tokio.rs/tokio/topics/shutdown"
+      ],
+      "codeSlug": "tokio_tunnel_orchestration"
     },
     {
       "day": 27,
       "node": "节点 3",
       "difficulty": "高级",
-      "topic": "异步 IO 与本地服务边界",
-      "focus": "async fs、异步锁、阻塞代码隔离、spawn_blocking、IO 背压",
-      "practice": "改造文件 repository 的调用边界，识别哪些操作应保留同步，哪些需要隔离阻塞",
-      "understanding": "异步系统最怕假异步，阻塞点必须被明确隔离，否则 runtime 会被悄悄拖垮。",
-      "reference": ["https://docs.rs/tokio/latest/tokio/fs/", "https://docs.rs/tokio/latest/tokio/task/fn.spawn_blocking.html", "https://ryhl.io/blog/async-what-is-blocking/"],
-      "codeSlug": "async_io_boundaries"
+      "topic": "异步网络 IO 与阻塞边界",
+      "objective": "学完后能够识别同步阻塞点，决定哪些 TCP/UDP、文件配置和 CPU 解析操作应保留同步或隔离。",
+      "focus": "tokio::net、TCP/UDP、异步锁、阻塞代码隔离、spawn_blocking、IO 背压",
+      "objcBridge": "就像不能阻塞主线程，Rust async 也不能阻塞 runtime worker；spawn_blocking 是把同步重活隔离出去的边界。",
+      "practice": "改造 profile 加载、route matching 和模拟网络 IO 边界，识别哪些操作应保留同步，哪些需要隔离阻塞。",
+      "understanding": "异步网络系统最怕假异步，阻塞点必须被明确隔离，否则 runtime 会被悄悄拖垮。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/tokio/latest/tokio/net/",
+        "https://docs.rs/tokio/latest/tokio/task/fn.spawn_blocking.html",
+        "https://ryhl.io/blog/async-what-is-blocking/"
+      ],
+      "codeSlug": "async_network_io_boundaries"
     },
     {
       "day": 28,
       "node": "节点 3",
       "difficulty": "高级",
-      "topic": "Backpressure、限流与任务队列设计",
-      "focus": "bounded channel、并发度限制、Semaphore、超时、重试与失败策略",
-      "practice": "为任务执行器增加最大并发数、队列容量、任务超时和有限重试机制",
-      "understanding": "工程级并发必须主动设计压力边界，否则系统会在高负载下以不可控方式失败。",
-      "reference": ["https://docs.rs/tokio/latest/tokio/sync/struct.Semaphore.html", "https://docs.rs/tokio/latest/tokio/sync/mpsc/", "https://tokio.rs/tokio/tutorial/channels"],
-      "codeSlug": "backpressure_retry_queue"
+      "topic": "Backpressure、限流与网络队列设计",
+      "objective": "学完后能够为 packet/session 处理器设计并发度、队列容量、超时和有限重试，建立压力边界。",
+      "focus": "bounded channel、连接并发度限制、Semaphore、超时、重试、丢包/拒绝策略",
+      "objcBridge": "可把 Semaphore/有界队列类比 maxConcurrentOperationCount 和请求节流，但 Rust 会把队列容量、超时和重试写成系统策略。",
+      "practice": "为网络执行器增加最大并发连接数、队列容量、session 超时和有限重试机制。",
+      "understanding": "工程级网络并发必须主动设计压力边界，否则系统会在高负载下以不可控方式失败。",
+      "diagram": {
+        "recommended": true,
+        "type": "flowchart",
+        "title": "网络队列背压、限流与重试图",
+        "purpose": "展示有界队列、Semaphore、超时、重试、丢弃和失败终止之间的控制流。"
+      },
+      "reference": [
+        "https://docs.rs/tokio/latest/tokio/sync/struct.Semaphore.html",
+        "https://docs.rs/tokio/latest/tokio/sync/mpsc/",
+        "https://tokio.rs/tokio/tutorial/channels"
+      ],
+      "codeSlug": "network_backpressure_retry"
     },
     {
       "day": 29,
       "node": "节点 3",
       "difficulty": "高级",
       "topic": "异步测试与确定性验证",
+      "objective": "学完后能够使用 tokio::test、时间暂停、模拟 peer 和超时断言，让异步网络测试更可重复。",
       "focus": "tokio::test、时间控制、并发测试、超时测试、race condition 复现思路",
-      "practice": "为 async executor、限流、超时、重试、取消补充测试，并使用暂停时间验证定时逻辑",
+      "objcBridge": "XCTestExpectation 能等待异步回调；Tokio 测试还能暂停和推进虚拟时间，让超时与重试逻辑更确定。",
+      "practice": "为 async session executor、限流、超时、重试、取消补充测试，并使用暂停时间验证定时逻辑。",
       "understanding": "并发测试的目标是让不确定行为尽量变得可观察、可重复、可约束。",
-      "reference": ["https://docs.rs/tokio/latest/tokio/attr.test.html", "https://docs.rs/tokio/latest/tokio/time/fn.pause.html", "https://tokio.rs/tokio/topics/testing"],
-      "codeSlug": "async_deterministic_tests"
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/tokio/latest/tokio/attr.test.html",
+        "https://docs.rs/tokio/latest/tokio/time/fn.pause.html",
+        "https://tokio.rs/tokio/topics/testing"
+      ],
+      "codeSlug": "async_network_tests"
     },
     {
       "day": 30,
       "node": "节点 3",
       "difficulty": "高级",
-      "topic": "节点 3 综合验收：异步任务调度核心",
+      "topic": "节点 3 综合验收：异步网络调度核心",
+      "objective": "学完后能够交付 FerrisTunnel v0.3，把并发调度、限流、超时、状态追踪和异步测试整合成网络系统内核。",
       "focus": "Send/Sync、线程、channel、锁、Tokio、限流、超时、异步测试整合",
-      "practice": "完成 FerrisFlow v0.3：支持异步任务调度、并发限制、状态追踪、超时重试和测试覆盖",
-      "understanding": "第三个节点的目标是把本地 CLI 工具升级为具备真实并发调度能力的 Rust 系统内核。",
-      "reference": ["https://doc.rust-lang.org/book/ch16-00-concurrency.html", "https://rust-lang.github.io/async-book/", "https://tokio.rs/"],
-      "codeSlug": "node03_async_scheduler"
+      "objcBridge": "这一节点相当于从客户端任务队列经验迁移到服务端调度核心，重点是压力边界、状态追踪和失败汇总。",
+      "practice": "完成 FerrisTunnel v0.3：支持异步 session 调度、并发限制、状态追踪、超时重试和测试覆盖。",
+      "understanding": "第三个节点的目标是把本地 CLI 工具升级为具备真实异步网络调度能力的 Rust 系统内核。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch16-00-concurrency.html",
+        "https://rust-lang.github.io/async-book/",
+        "https://tokio.rs/"
+      ],
+      "codeSlug": "node03_async_network_core"
     },
     {
       "day": 31,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "Web 服务架构与 HTTP 边界",
-      "focus": "Axum、Router、handler、共享状态、请求生命周期、CLI 到服务化的边界迁移",
-      "practice": "将 FerrisFlow 从纯 CLI 扩展为本地 HTTP 服务，暴露健康检查与任务查询接口",
-      "understanding": "Web 层不是业务层，HTTP handler 应该只负责协议适配、参数解析和响应组装。",
-      "reference": ["https://docs.rs/axum/latest/axum/", "https://docs.rs/tower/latest/tower/", "https://hyper.rs/"],
-      "codeSlug": "axum_http_boundary"
+      "topic": "网络 I/O 边界：TCP、UDP 与 TUN/TAP 心智模型",
+      "objective": "学完后能够区分 TCP stream、UDP datagram、用户态 tunnel 和 TUN/TAP 设备在系统网络中的边界。",
+      "focus": "tokio::net、TcpListener/TcpStream、UdpSocket、SocketAddr、TUN/TAP 概念、平台权限与可移植边界",
+      "objcBridge": "可类比 Network.framework/NSURLSession 处理连接，但 VPN/隧道更接近 NEPacketTunnelProvider 的包流心智；本课聚焦 Rust 侧系统边界。",
+      "practice": "将 FerrisTunnel 从纯 CLI 扩展为本地 TCP echo/UDP relay 实验，建立 listener、peer、session 的网络入口。",
+      "understanding": "系统网络代码的第一原则是分清协议边界、平台边界和权限边界，不能把 socket 当成普通文件流随意处理。",
+      "diagram": {
+        "recommended": true,
+        "type": "architecture",
+        "title": "TCP/UDP/TUN 边界架构图",
+        "purpose": "展示用户态 socket、TUN/TAP 概念、listener、session 和平台权限边界。"
+      },
+      "reference": [
+        "https://docs.rs/tokio/latest/tokio/net/",
+        "https://doc.rust-lang.org/std/net/",
+        "https://www.kernel.org/doc/html/latest/networking/tuntap.html"
+      ],
+      "codeSlug": "network_io_boundary"
     },
     {
       "day": 32,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "DTO、验证与领域模型隔离",
-      "focus": "请求/响应 DTO、领域模型转换、输入校验、API 兼容性、错误语义",
-      "practice": "为任务创建、状态切换、依赖查询设计 REST API，并隔离 DTO 与 domain 类型",
-      "understanding": "领域模型服务业务正确性，DTO 服务外部契约，二者不应互相污染。",
-      "reference": ["https://docs.rs/serde/latest/serde/", "https://docs.rs/validator/latest/validator/", "https://rust-lang.github.io/api-guidelines/future-proofing.html"],
-      "codeSlug": "dto_domain_isolation"
+      "topic": "协议帧、解析与领域模型隔离",
+      "objective": "学完后能够设计简单隧道 frame 格式，完成 bytes 到 Frame/Command 的解析、校验和版本隔离。",
+      "focus": "wire format、bytes buffer、length-prefix、parser、协议版本、输入校验、领域模型转换",
+      "objcBridge": "DTO 类似 network model/view model；协议帧更靠近二进制网络包，不能把外部字节直接当成可信领域对象。",
+      "practice": "为 HELLO/DATA/CLOSE/PING 设计最小 frame，隔离 wire frame 与 domain command。",
+      "understanding": "协议模型服务外部兼容性，领域模型服务业务正确性，二者不应互相污染。",
+      "diagram": {
+        "recommended": true,
+        "type": "relationship",
+        "title": "协议帧与领域模型隔离图",
+        "purpose": "展示 bytes、wire frame、domain command、validation 和 versioning 的关系。"
+      },
+      "reference": [
+        "https://docs.rs/bytes/latest/bytes/",
+        "https://docs.rs/nom/latest/nom/",
+        "https://rust-lang.github.io/api-guidelines/future-proofing.html"
+      ],
+      "codeSlug": "protocol_frame_model"
     },
     {
       "day": 33,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "数据库持久化与 SQLx",
-      "focus": "SQLite/PostgreSQL 取舍、SQLx compile-time query、连接池、migration",
-      "practice": "将文件 repository 替换为 SQLx repository，建立任务表、依赖表与迁移脚本",
-      "understanding": "数据库不是更大的文件，它引入 schema、连接池、迁移和一致性边界。",
-      "reference": ["https://docs.rs/sqlx/latest/sqlx/", "https://docs.rs/sqlx/latest/sqlx/macro.query.html", "https://www.sqlite.org/docs.html"],
-      "codeSlug": "sqlx_repository"
+      "topic": "路由表、会话表与转发决策",
+      "objective": "学完后能够建模 CIDR 路由、session table 和转发决策，并理解 VPN/代理的数据平面基础。",
+      "focus": "CIDR、route table、session table、peer selection、longest prefix match、转发决策、状态缓存",
+      "objcBridge": "这比普通 App 网络请求更底层：不是发起 URL 请求，而是根据路由和会话状态决定数据要交给哪个 peer 或 transport。",
+      "practice": "建立 route table、session table 与 packet/frame 转发决策，支持按目标地址选择 peer。",
+      "understanding": "网络系统的核心不只是收发数据，而是在路由、会话和策略之间做稳定、可测试的转发决策。",
+      "diagram": {
+        "recommended": true,
+        "type": "flowchart",
+        "title": "路由表与会话转发决策图",
+        "purpose": "展示 packet/frame 进入后进行 route lookup、peer selection、session lookup 和转发的路径。"
+      },
+      "reference": [
+        "https://docs.rs/ipnet/latest/ipnet/",
+        "https://doc.rust-lang.org/std/net/struct.IpAddr.html",
+        "https://docs.rs/tokio/latest/tokio/sync/"
+      ],
+      "codeSlug": "routing_session_table"
     },
     {
       "day": 34,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "事务、一致性与领域不变量",
-      "focus": "transaction、唯一约束、外键、乐观检查、状态流转原子性",
-      "practice": "为任务创建、依赖添加、状态切换增加事务保护，避免非法依赖和半写入状态",
-      "understanding": "工程系统的关键不变量必须由应用层和数据库层共同守住。",
-      "reference": ["https://docs.rs/sqlx/latest/sqlx/struct.Transaction.html", "https://www.sqlite.org/lang_transaction.html", "https://www.sqlite.org/foreignkeys.html"],
-      "codeSlug": "transaction_invariants"
+      "topic": "认证、加密握手与密钥边界",
+      "objective": "学完后能够把认证、密钥材料、握手状态和加密传输边界拆开设计，避免把安全逻辑散落到业务代码。",
+      "focus": "pre-shared key、handshake state、nonce/replay 风险、密钥生命周期、rustls/Noise 心智、错误隐藏",
+      "objcBridge": "可类比 Keychain 与 TLS session，但 Rust 侧要把密钥所有权、日志脱敏和握手失败语义写成明确边界。",
+      "practice": "实现教学用握手状态机与密钥占位接口，明确哪些数据可日志化、哪些必须隐藏；不自研生产密码算法。",
+      "understanding": "安全边界不是加一个加密库就结束，而是认证、密钥生命周期、错误暴露和重放风险的系统设计。",
+      "diagram": {
+        "recommended": true,
+        "type": "flowchart",
+        "title": "认证与加密握手边界图",
+        "purpose": "展示 HELLO、认证、密钥材料、握手状态、失败隐藏和数据传输的边界。"
+      },
+      "reference": [
+        "https://docs.rs/rustls/latest/rustls/",
+        "https://docs.rs/zeroize/latest/zeroize/",
+        "https://www.wireguard.com/protocol/"
+      ],
+      "codeSlug": "crypto_handshake_boundary"
     },
     {
       "day": 35,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "后台 Worker 与服务内任务调度",
-      "focus": "async worker、队列消费、生命周期管理、graceful shutdown、任务取消",
-      "practice": "把 Day 30 的异步执行器接入 Web 服务，支持通过 API 触发任务执行",
-      "understanding": "服务内 worker 要有明确启动、停止、错误汇报和资源回收策略。",
-      "reference": ["https://tokio.rs/tokio/topics/shutdown", "https://docs.rs/tokio/latest/tokio/sync/watch/", "https://docs.rs/tokio-util/latest/tokio_util/sync/struct.CancellationToken.html"],
-      "codeSlug": "service_worker_lifecycle"
+      "topic": "Tunnel Worker 与连接生命周期",
+      "objective": "学完后能够把 listener、session worker、route decision、shutdown 和 cancellation 组织成可控生命周期。",
+      "focus": "async worker、listener loop、session worker、队列消费、生命周期管理、graceful shutdown、任务取消",
+      "objcBridge": "服务内 worker 类似后台 operation，但系统守护进程必须设计启动、优雅关闭、取消和错误上报，而不是依赖 App 生命周期。",
+      "practice": "把 Day 30 的异步执行器接入真实 TCP/UDP 入口，支持通过 CLI 启动/停止本地 tunnel worker。",
+      "understanding": "Tunnel worker 要有明确启动、停止、错误汇报和资源回收策略，否则网络进程会留下难排查的半开连接。",
+      "diagram": {
+        "recommended": true,
+        "type": "architecture",
+        "title": "Tunnel Worker 生命周期架构图",
+        "purpose": "展示 listener、session worker、route decision、cancellation 和 graceful shutdown。"
+      },
+      "reference": [
+        "https://tokio.rs/tokio/topics/shutdown",
+        "https://docs.rs/tokio-util/latest/tokio_util/sync/struct.CancellationToken.html",
+        "https://docs.rs/tokio/latest/tokio/task/struct.JoinSet.html"
+      ],
+      "codeSlug": "tunnel_worker_lifecycle"
     },
     {
       "day": 36,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "配置系统与多环境运行",
-      "focus": "config file、环境变量、默认值、密钥隔离、开发/测试/生产配置",
-      "practice": "为 FerrisFlow 增加 config.toml 与环境变量覆盖，配置数据库、日志、并发度",
-      "understanding": "配置是运行时架构的一部分，不能散落在代码常量和隐式默认行为里。",
-      "reference": ["https://docs.rs/config/latest/config/", "https://docs.rs/toml/latest/toml/", "https://12factor.net/config"],
-      "codeSlug": "configuration_environments"
+      "topic": "配置系统与多环境网络 Profile",
+      "objective": "学完后能够用 config.toml 与环境变量覆盖管理 listen 地址、peer、route、密钥路径和并发度。",
+      "focus": "config file、环境变量、默认值、密钥隔离、dev/test/prod network profile、配置校验",
+      "objcBridge": "plist/UserDefaults 管配置的经验可迁移，但系统网络工具更依赖环境变量覆盖、密钥隔离和多环境 profile。",
+      "practice": "为 FerrisTunnel 增加 config.toml 与环境变量覆盖，配置 listen、peer、route、日志、并发度和密钥路径。",
+      "understanding": "配置是运行时架构的一部分，网络配置尤其不能散落在代码常量和隐式默认行为里。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/config/latest/config/",
+        "https://docs.rs/toml/latest/toml/",
+        "https://12factor.net/config"
+      ],
+      "codeSlug": "network_configuration_profiles"
     },
     {
       "day": 37,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "API 错误模型与响应契约",
-      "focus": "HTTP status、错误码、结构化错误响应、内部错误隐藏、用户可读诊断",
-      "practice": "建立统一 API error response，将领域错误、数据库错误、验证错误映射到 HTTP",
-      "understanding": "好的错误契约既保护内部实现，也帮助调用方稳定处理失败。",
-      "reference": ["https://docs.rs/axum/latest/axum/response/trait.IntoResponse.html", "https://www.rfc-editor.org/rfc/rfc9457.html", "https://httpwg.org/specs/rfc9110.html"],
-      "codeSlug": "api_error_contract"
+      "topic": "网络错误模型与诊断契约",
+      "objective": "学完后能够把协议错误、认证失败、IO 超时、路由缺失和配置错误映射为稳定诊断输出。",
+      "focus": "错误码、结构化错误响应、retryable/fatal、内部错误隐藏、用户可读诊断、退出码",
+      "objcBridge": "NSError 的 domain/code/userInfo 心智很有用；网络工具也要有稳定 code、可读信息和隐藏内部实现的边界。",
+      "practice": "建立统一 NetworkError，将协议错误、配置错误、认证错误、IO 错误、路由错误映射到 CLI/日志诊断。",
+      "understanding": "好的错误契约既保护内部实现，也帮助使用者稳定处理失败和定位网络问题。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/std/io/struct.Error.html",
+        "https://rust-lang.github.io/api-guidelines/interoperability.html",
+        "https://docs.rs/thiserror/latest/thiserror/"
+      ],
+      "codeSlug": "network_error_contract"
     },
     {
       "day": 38,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "服务可观测性：Tracing、Metrics 与 Health",
-      "focus": "tracing span、request id、metrics、health/readiness、慢请求诊断",
-      "practice": "为 HTTP 请求、数据库访问、worker 执行增加 tracing；暴露健康检查与基础指标",
-      "understanding": "可观测性要贯穿请求链路，而不是事后往日志里补几行字符串。",
-      "reference": ["https://docs.rs/tower-http/latest/tower_http/trace/", "https://docs.rs/tracing/latest/tracing/", "https://opentelemetry.io/docs/specs/"],
-      "codeSlug": "service_observability"
+      "topic": "网络可观测性：Tracing、Metrics 与 Health",
+      "objective": "学完后能够为 listener、session、route decision、frame parse 和 worker 链路增加 tracing、metrics 与健康检查。",
+      "focus": "tracing span、connection id、session id、metrics、health/readiness、慢连接和丢包诊断",
+      "objcBridge": "可把 tracing、metrics、health 类比 os_log、Instruments 和健康探针的组合，用来观察连接链路而非单点日志。",
+      "practice": "为 TCP/UDP 入口、frame parse、route decision、session worker 增加 tracing；暴露基础指标和健康检查命令。",
+      "understanding": "可观测性要贯穿连接链路，而不是事后往日志里补几行字符串。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/tracing/latest/tracing/",
+        "https://docs.rs/metrics/latest/metrics/",
+        "https://opentelemetry.io/docs/specs/"
+      ],
+      "codeSlug": "network_observability"
     },
     {
       "day": 39,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "API 集成测试与测试数据库",
-      "focus": "测试 app 构建、临时数据库、migration 测试、HTTP 断言、并发请求测试",
-      "practice": "为任务 API、数据库 repository、worker 触发流程建立集成测试套件",
-      "understanding": "服务测试要覆盖真实边界：HTTP、数据库、状态变化和失败路径。",
-      "reference": ["https://docs.rs/axum/latest/axum/struct.Router.html", "https://docs.rs/tower/latest/tower/trait.ServiceExt.html", "https://docs.rs/tempfile/latest/tempfile/"],
-      "codeSlug": "api_integration_tests"
+      "topic": "网络集成测试与模拟 Peer",
+      "objective": "学完后能够搭建 loopback TCP/UDP 测试、模拟 peer、超时和丢包场景，覆盖真实网络边界。",
+      "focus": "测试 listener、模拟 peer、临时端口、协议帧断言、超时测试、并发连接测试",
+      "objcBridge": "这类似网络层集成测试，但 Rust 系统测试会把真实 socket、协议解析、状态变化和失败路径一起纳入验收。",
+      "practice": "为 TCP/UDP 入口、frame parser、route decision、worker 触发流程建立集成测试套件。",
+      "understanding": "网络测试要覆盖真实边界：socket、协议帧、状态变化、超时和失败路径。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/tokio/latest/tokio/attr.test.html",
+        "https://docs.rs/tokio/latest/tokio/net/",
+        "https://docs.rs/tempfile/latest/tempfile/"
+      ],
+      "codeSlug": "network_integration_tests"
     },
     {
       "day": 40,
       "node": "节点 4",
       "difficulty": "架构级",
-      "topic": "节点 4 综合验收：生产化本地服务",
-      "focus": "Web API、DTO、SQLx、事务、配置、worker、观测性、集成测试整合",
-      "practice": "完成 FerrisFlow v0.4：具备 REST API、数据库持久化、后台调度、配置与可观测性的本地服务",
-      "understanding": "第四个节点的目标是把 Rust 工程内核升级为可运行、可测试、可诊断的服务系统。",
-      "reference": ["https://docs.rs/axum/latest/axum/", "https://docs.rs/sqlx/latest/sqlx/", "https://tokio.rs/"],
-      "codeSlug": "node04_production_service"
+      "topic": "节点 4 综合验收：本地隧道/代理服务",
+      "objective": "学完后能够交付 FerrisTunnel v0.4，把 TCP/UDP 入口、协议帧、路由、worker、配置和观测性合成可运行系统。",
+      "focus": "TCP/UDP、协议帧、路由表、session table、配置、worker、观测性、集成测试整合",
+      "objcBridge": "此节点把客户端工程里的分层、配置、日志、测试经验迁移到系统网络服务，边界从 UI 事件变成 socket、packet 和 worker。",
+      "practice": "完成 FerrisTunnel v0.4：具备本地 TCP/UDP relay、协议帧、路由决策、后台 worker、配置与可观测性的本地网络服务。",
+      "understanding": "第四个节点的目标是把 Rust 工程内核升级为可运行、可测试、可诊断的系统网络服务。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/tokio/latest/tokio/net/",
+        "https://docs.rs/bytes/latest/bytes/",
+        "https://tokio.rs/"
+      ],
+      "codeSlug": "node04_local_tunnel_service"
     },
     {
       "day": 41,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "性能基线与 Benchmark 工程",
-      "focus": "criterion、基准测试设计、冷热路径、吞吐/延迟、避免误测",
-      "practice": "为 FerrisFlow 建立任务查询、状态流转、调度执行、数据库访问的 benchmark 基线",
-      "understanding": "没有基线就没有优化，Rust 性能工程首先是测量纪律，而不是凭直觉改代码。",
-      "reference": ["https://bheisler.github.io/criterion.rs/book/", "https://docs.rs/criterion/latest/criterion/", "https://nnethercote.github.io/perf-book/"],
-      "codeSlug": "benchmark_baseline"
+      "topic": "网络性能基线与 Benchmark 工程",
+      "objective": "学完后能够用 criterion 建立吞吐、延迟、p95/p99 和 payload size 基线，并避免把 benchmark 做成误测。",
+      "focus": "criterion、吞吐/延迟、p95/p99、payload size、冷热路径、避免误测",
+      "objcBridge": "Instruments 经验可以迁移到 criterion：先建立稳定基线，再谈优化，避免只凭体感判断网络性能。",
+      "practice": "为 FerrisTunnel 建立 frame parse、route lookup、session dispatch、TCP/UDP relay 的 benchmark 基线。",
+      "understanding": "没有基线就没有优化，系统网络性能工程首先是测量纪律，而不是凭直觉改代码。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://bheisler.github.io/criterion.rs/book/",
+        "https://docs.rs/criterion/latest/criterion/",
+        "https://nnethercote.github.io/perf-book/"
+      ],
+      "codeSlug": "network_benchmark_baseline"
     },
     {
       "day": 42,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "内存布局、分配与零拷贝设计",
-      "focus": "String/&str、Vec、slice、Cow、arena 思维、分配热点分析",
-      "practice": "优化任务查询与 API 响应构建，减少不必要 clone 与中间分配",
-      "understanding": "高性能 Rust 的关键不是到处写 unsafe，而是先让所有权和借用帮助减少分配。",
-      "reference": ["https://doc.rust-lang.org/std/borrow/enum.Cow.html", "https://doc.rust-lang.org/std/vec/struct.Vec.html", "https://doc.rust-lang.org/nomicon/vec/vec.html"],
-      "codeSlug": "memory_allocation_zerocopy"
+      "topic": "缓冲区、内存布局与零拷贝转发",
+      "objective": "学完后能够分析 Vec<u8>、Bytes、slice、Cow 的分配成本，减少 packet/frame 转发中的无意义复制。",
+      "focus": "Vec<u8>、Bytes、slice、Cow、buffer reuse、scatter/gather 心智、分配热点分析",
+      "objcBridge": "NSData/NSMutableData copy 成本意识可以迁移过来；Rust 进一步用 slice、Bytes、Cow 表达借用与按需复制。",
+      "practice": "优化 frame parse、route decision 与 relay 写出路径，减少不必要 clone 与中间分配。",
+      "understanding": "高性能 Rust 网络代码的关键不是到处写 unsafe，而是先让所有权和借用帮助减少分配与复制。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://docs.rs/bytes/latest/bytes/",
+        "https://doc.rust-lang.org/std/vec/struct.Vec.html",
+        "https://doc.rust-lang.org/std/borrow/enum.Cow.html"
+      ],
+      "codeSlug": "buffer_zerocopy_forwarding"
     },
     {
       "day": 43,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "Unsafe Rust 的边界与审计",
-      "focus": "unsafe 语义、unsafe trait、裸指针、不变量文档、Miri、最小 unsafe 原则",
-      "practice": "在独立实验模块中实现一个受控的高性能 ID buffer，并用安全 API 包裹",
-      "understanding": "unsafe 不是关闭安全性，而是把编译器无法证明的不变量转交给工程师负责。",
-      "reference": ["https://doc.rust-lang.org/nomicon/", "https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html", "https://github.com/rust-lang/miri"],
-      "codeSlug": "unsafe_boundary_audit"
+      "topic": "Unsafe Rust 的边界与包处理审计",
+      "objective": "学完后能够说明 unsafe 在高性能 buffer/packet 实验中的责任边界，用安全 API 包裹并用 Miri 辅助审计。",
+      "focus": "unsafe 语义、裸指针、buffer 不变量、边界检查、不变量文档、Miri、最小 unsafe 原则",
+      "objcBridge": "unsafe 类似使用裸指针、Unmanaged 或 Core Foundation 桥接时的责任边界：不是随便用，而是文档化不变量。",
+      "practice": "在独立实验模块中实现一个受控的高性能 packet buffer，并用安全 API 包裹。",
+      "understanding": "unsafe 不是关闭安全性，而是把编译器无法证明的系统不变量转交给工程师负责。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/nomicon/",
+        "https://doc.rust-lang.org/book/ch19-01-unsafe-rust.html",
+        "https://github.com/rust-lang/miri"
+      ],
+      "codeSlug": "unsafe_packet_boundary_audit"
     },
     {
       "day": 44,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "宏系统与工程代码生成",
-      "focus": "macro_rules!、声明宏、过程宏概念、重复样板消除、错误信息质量",
-      "practice": "为 API 错误响应、测试 fixture 或命令注册设计轻量宏，减少重复代码",
-      "understanding": "宏应服务一致性和可维护性，不能为了聪明牺牲可读性和调试体验。",
-      "reference": ["https://doc.rust-lang.org/book/ch19-06-macros.html", "https://doc.rust-lang.org/reference/macros.html", "https://doc.rust-lang.org/reference/procedural-macros.html"],
-      "codeSlug": "macro_codegen"
+      "topic": "宏系统与协议样板生成",
+      "objective": "学完后能够用 macro_rules! 消除 frame 类型、错误映射和测试 fixture 的局部重复样板。",
+      "focus": "macro_rules!、声明宏、协议帧样板、测试 fixture、错误信息质量",
+      "objcBridge": "Objective-C 宏容易牺牲可读性；Rust 宏更强，但也应只用来消除稳定重复模式，并照顾错误信息。",
+      "practice": "为协议 frame、错误响应、测试 fixture 或命令注册设计轻量宏，减少重复代码。",
+      "understanding": "宏应服务一致性和可维护性，不能为了聪明牺牲系统代码的可读性和调试体验。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/ch19-06-macros.html",
+        "https://doc.rust-lang.org/reference/macros.html",
+        "https://doc.rust-lang.org/reference/procedural-macros.html"
+      ],
+      "codeSlug": "protocol_macro_codegen"
     },
     {
       "day": 45,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "架构边界：插件化与扩展点设计",
-      "focus": "trait object、注册表、能力接口、版本兼容、扩展点稳定性",
-      "practice": "为 FerrisFlow 设计 executor plugin 接口，支持不同任务执行策略可插拔",
-      "understanding": "架构级抽象的难点不是抽出来，而是让抽象在未来变化中仍然稳定。",
-      "reference": ["https://rust-lang.github.io/api-guidelines/future-proofing.html", "https://doc.rust-lang.org/reference/items/traits.html", "https://doc.rust-lang.org/book/ch17-02-trait-objects.html"],
-      "codeSlug": "plugin_extension_points"
+      "topic": "架构边界：传输插件与扩展点设计",
+      "objective": "学完后能够设计 Transport plugin 接口、注册表和版本兼容策略，让 TCP/UDP/mock/TUN 适配可替换。",
+      "focus": "trait object、注册表、Transport 能力接口、Router/Crypto 扩展点、版本兼容、扩展点稳定性",
+      "objcBridge": "插件接口可类比 protocol 加注册表，但 Rust 会要求对象安全、版本兼容和能力边界都能被类型系统表达。",
+      "practice": "为 FerrisTunnel 设计 transport plugin 接口，支持 TCP、UDP、mock transport，预留 TUN/TAP 适配边界。",
+      "understanding": "架构级抽象的难点不是抽出来，而是让抽象在未来网络协议和平台变化中仍然稳定。",
+      "diagram": {
+        "recommended": true,
+        "type": "architecture",
+        "title": "Transport Plugin 扩展点架构图",
+        "purpose": "展示 Transport trait、注册表、TCP/UDP/mock/TUN 适配和版本兼容边界。"
+      },
+      "reference": [
+        "https://rust-lang.github.io/api-guidelines/future-proofing.html",
+        "https://doc.rust-lang.org/reference/items/traits.html",
+        "https://doc.rust-lang.org/book/ch17-02-trait-objects.html"
+      ],
+      "codeSlug": "transport_plugin_extension_points"
     },
     {
       "day": 46,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "安全性与鲁棒性工程",
-      "focus": "输入边界、路径安全、配置安全、拒绝服务风险、依赖审计、错误隐藏",
-      "practice": "审计 CLI/API/配置/文件路径/数据库输入，补充安全测试和失败保护",
-      "understanding": "Rust 能减少内存安全问题，但不能自动解决业务安全、资源耗尽和边界滥用。",
-      "reference": ["https://anssi-fr.github.io/rust-guide/", "https://rustsec.org/", "https://docs.rs/cargo-deny/latest/cargo_deny/"],
-      "codeSlug": "security_robustness_audit"
+      "topic": "VPN/代理安全性与鲁棒性工程",
+      "objective": "学完后能够审计配置、密钥路径、协议输入、资源耗尽、日志泄漏和依赖风险，补充安全测试。",
+      "focus": "输入边界、路径安全、密钥保护、配置安全、拒绝服务风险、依赖审计、日志脱敏",
+      "objcBridge": "客户端也要防输入、路径和网络滥用；Rust 只减少内存安全风险，业务安全、协议安全和资源耗尽仍要靠工程设计。",
+      "practice": "审计 CLI/配置/协议帧/文件路径/密钥路径/网络输入，补充安全测试和失败保护。",
+      "understanding": "Rust 能减少内存安全问题，但不能自动解决协议滥用、资源耗尽、密钥泄漏和边界误用。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://anssi-fr.github.io/rust-guide/",
+        "https://rustsec.org/",
+        "https://docs.rs/cargo-deny/latest/cargo_deny/"
+      ],
+      "codeSlug": "vpn_security_robustness_audit"
     },
     {
       "day": 47,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "工具链、CI 与质量门禁",
-      "focus": "rustfmt、clippy、cargo deny、cargo audit、coverage、GitHub Actions",
-      "practice": "为仓库配置格式化、lint、测试、审计、benchmark smoke check 的 CI 流程",
-      "understanding": "工程质量不能靠记忆执行，必须固化进工具链和自动化门禁。",
-      "reference": ["https://doc.rust-lang.org/cargo/commands/cargo-fmt.html", "https://doc.rust-lang.org/clippy/", "https://docs.github.com/actions"],
-      "codeSlug": "toolchain_ci_quality_gate"
+      "topic": "系统网络项目工具链、CI 与质量门禁",
+      "objective": "学完后能够配置 rustfmt、clippy、cargo audit/deny、coverage、Linux/macOS smoke test 和 GitHub Actions。",
+      "focus": "rustfmt、clippy、cargo deny、cargo audit、coverage、跨平台 smoke test、GitHub Actions",
+      "objcBridge": "类似 Xcode build phases、fastlane 和 CI，Rust 把 fmt、lint、审计和测试统一进 cargo/CI 门禁。",
+      "practice": "为仓库配置格式化、lint、测试、审计、benchmark smoke check、loopback 网络测试的 CI 流程。",
+      "understanding": "系统网络工程质量不能靠记忆执行，必须固化进工具链和自动化门禁。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/cargo/commands/cargo-fmt.html",
+        "https://doc.rust-lang.org/clippy/",
+        "https://docs.github.com/actions"
+      ],
+      "codeSlug": "system_network_ci_quality_gate"
     },
     {
       "day": 48,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "发布、版本化与文档工程",
-      "focus": "SemVer、CHANGELOG、README、crate 文档、API 示例、release profile",
-      "practice": "完善 FerrisFlow 文档、命令示例、架构说明，并准备 v1.0 release checklist",
-      "understanding": "一个 Rust 项目是否成熟，往往体现在文档、版本承诺和发布流程上。",
-      "reference": ["https://semver.org/", "https://doc.rust-lang.org/cargo/reference/manifest.html", "https://doc.rust-lang.org/rustdoc/"],
-      "codeSlug": "release_documentation"
+      "topic": "发布、版本化与运维文档工程",
+      "objective": "学完后能够整理 README、配置示例、运行手册、故障排查、CHANGELOG、SemVer 和 v1.0 release checklist。",
+      "focus": "SemVer、CHANGELOG、README、配置示例、运行手册、故障排查、release profile",
+      "objcBridge": "发布 crate 或服务和发布 framework 一样需要版本承诺、文档和变更记录，SemVer 是调用方信任你的契约。",
+      "practice": "完善 FerrisTunnel 文档、命令示例、配置样例、架构说明、故障排查，并准备 v1.0 release checklist。",
+      "understanding": "一个系统网络项目是否成熟，往往体现在文档、版本承诺、运行手册和发布流程上。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://semver.org/",
+        "https://doc.rust-lang.org/cargo/reference/manifest.html",
+        "https://doc.rust-lang.org/rustdoc/"
+      ],
+      "codeSlug": "release_operations_documentation"
     },
     {
       "day": 49,
       "node": "节点 5",
       "difficulty": "架构级",
       "topic": "最终项目集成与系统验收",
-      "focus": "端到端验收、性能回归、故障注入、测试矩阵、架构复盘",
-      "practice": "完成 FerrisFlow v1.0 RC：CLI + HTTP API + SQLite + async worker + observability + CI",
-      "understanding": "最终验收不是功能都能跑，而是验证系统在真实边界下仍然可靠。",
-      "reference": ["https://doc.rust-lang.org/cargo/commands/cargo-test.html", "https://doc.rust-lang.org/cargo/commands/cargo-bench.html", "https://docs.github.com/actions/automating-builds-and-tests"],
-      "codeSlug": "final_system_acceptance"
+      "objective": "学完后能够用端到端验收、性能回归、故障注入、安全复盘和测试矩阵验证 FerrisTunnel v1.0 RC。",
+      "focus": "端到端验收、性能回归、故障注入、网络异常、测试矩阵、安全复盘、架构复盘",
+      "objcBridge": "可类比 TestFlight 前的 RC 验收，但这里要验证 CLI、socket、协议、路由、worker、性能和故障路径整体稳定。",
+      "practice": "完成 FerrisTunnel v1.0 RC：CLI + TCP/UDP relay + frame protocol + routing/session table + async worker + observability + CI。",
+      "understanding": "最终验收不是功能都能跑，而是验证系统在真实网络边界下仍然可靠。",
+      "diagram": {
+        "recommended": false,
+        "type": "none",
+        "title": "无需单独配图",
+        "purpose": "本节以代码实践和文字说明即可支撑理解，暂不需要单独生成 Excalidraw 图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/cargo/commands/cargo-test.html",
+        "https://doc.rust-lang.org/cargo/commands/cargo-bench.html",
+        "https://docs.github.com/actions/automating-builds-and-tests"
+      ],
+      "codeSlug": "final_network_system_acceptance"
     },
     {
       "day": 50,
       "node": "节点 5",
       "difficulty": "架构级",
-      "topic": "课程总验收：高级 Rust 工程系统",
-      "focus": "语言机制、架构边界、异步并发、测试、性能、安全、工具链的整体贯通",
-      "practice": "发布 FerrisFlow v1.0：整理最终代码、课程总结、学习路线延伸与后续挑战",
-      "understanding": "高级 Rust 的核心能力，是把类型系统、工程约束和系统设计合成一个可演进的软件产品。",
-      "reference": ["https://doc.rust-lang.org/book/", "https://doc.rust-lang.org/nomicon/", "https://rust-lang.github.io/api-guidelines/"],
-      "codeSlug": "course_final_capstone"
+      "topic": "课程总验收：系统网络 Rust 工程",
+      "objective": "学完后能够复盘 Rust 语言机制、系统边界、异步网络、协议建模、测试、性能、安全与发布如何合成可演进产品。",
+      "focus": "语言机制、系统边界、异步网络、协议建模、测试、性能、安全、工具链的整体贯通",
+      "objcBridge": "最终要把 Objective-C 经验中的边界、生命周期、异步和工具化能力，转换成 Rust 类型系统驱动的系统网络工程能力。",
+      "practice": "发布 FerrisTunnel v1.0：整理最终代码、课程总结、系统网络学习路线延伸与后续挑战。",
+      "understanding": "高级 Rust 系统网络能力，是把类型系统、资源约束、协议边界和系统设计合成一个可演进的软件产品。",
+      "diagram": {
+        "recommended": true,
+        "type": "mind_map",
+        "title": "系统网络 Rust 能力总览 Mind Map",
+        "purpose": "把语言机制、系统边界、异步网络、协议、测试、性能、安全、工具链和发布串成总览图。"
+      },
+      "reference": [
+        "https://doc.rust-lang.org/book/",
+        "https://doc.rust-lang.org/nomicon/",
+        "https://rust-lang.github.io/api-guidelines/"
+      ],
+      "codeSlug": "course_final_system_network_capstone"
     }
   ]
 }
